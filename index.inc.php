@@ -7,11 +7,16 @@
             <h1><?php echo APP_NAME ?></h1>
 
             <article>
-                <ul style="margin-bottom: 0;">
+                <table>
+                    <tbody>
 <?php foreach (METER_TYPES as $meter_type): ?>
-                    <li><a href="./add.php?type=<?= $meter_type ?>"><?= $meter_type ?></a>
-<?php endforeach; ?>
-                </ul>
+                        <tr>
+                            <td><a href="./add.php?type=<?= $meter_type ?>"><?= $meter_type ?></a></td>
+                            <td><img src="./images/<?= $meter_type ?>.png" /></td>
+                        </tr>
+<?php endforeach; ?>    
+                    </tbody>
+                </table>
             </article>
 
             <div>

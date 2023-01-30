@@ -33,26 +33,18 @@ $upload_file = $upload_dir . $upload_filename;
 
 // $uploadfile = $uploaddir . basename($image_file['name']);
 
-if (move_uploaded_file($image_file['tmp_name'], $upload_file)) {
-	echo "File successfully uploaded as: $upload_file\n";
-} else {
+if (!move_uploaded_file($image_file['tmp_name'], $upload_file)) {
     error("Could not upload file: " . $php_file_upload_errors[$image_file['error']]);
 }
 
 $db = new SQLite3(DB_NAME);
-$table = 'meter_values';
-
 $db->exec("INSERT INTO " . VALUES_TABLE_NAME . " (type, value, filename) VALUES (
 	'$type',
 	$value,
 	'$upload_filename')");
+$db->close();
 
-
-echo "<pre>";
-var_dump($_FILES);
-var_dump($_REQUEST);
-echo "</pre>";
-
+include('../store_value_success.inc.php');
 
 
 ?>

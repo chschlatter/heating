@@ -16,7 +16,7 @@
                 </label>
                 <label for="image">
                     Image of meter
-                    <input type="file" name="image" />
+                    <input type="file" accept="image/*" capture="enironment" name="image" />
                 </label>
                 <input type="hidden" name="type" value="<?=$type?>"/>
                 <button type="submit">Submit</button>
