@@ -28,10 +28,10 @@ if (!isset($no_auth) or $no_auth === false) {
 		list($c_username, $c_token) = explode(',', $_COOKIE['login']);
 
 		$db = new SQLite3(DB_NAME);
-		$results = $db->query(
-			"SELECT * FROM " . LOGIN_TABLE_NAME . " WHERE username = '$c_username';");
-		if ($row = $results->fetchArray()) {
-			if ($c_token != hash('sha256', $c_username . $row['password'])) {
+		$hashed_password = $db->querySingle(
+			"SELECT (password) FROM " . LOGIN_TABLE_NAME . "WHERE username = '$c_username';"");
+		if ($hashed_password) {
+			if ($c_token != hash('sha256', $c_username . $hashed_password)) {
 				error('Cannot validate cookie token.');
 			}
 		} else {
