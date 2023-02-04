@@ -1,6 +1,8 @@
 <?php
-
 include('../init.php');
+
+use AsyncAws\SimpleS3\SimpleS3Client;
+
 
 $php_file_upload_errors = array(
     0 => 'There is no error, the file uploaded with success',
@@ -25,6 +27,8 @@ if ($value == false or $value == NULL) error("Could not store value.");
 if (!isset($_REQUEST['type'])) error("No type provided.");
 $type = $_REQUEST['type'];
 
+
+/*
 $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
 $date = new DateTimeImmutable();
 $upload_filename = $date->format('Y-m-d_H-i-s') . '.' . 
@@ -36,12 +40,27 @@ $upload_file = $upload_dir . $upload_filename;
 if (!move_uploaded_file($image_file['tmp_name'], $upload_file)) {
     error("Could not upload file: " . $php_file_upload_errors[$image_file['error']]);
 }
+*/
 
-$db = new SQLite3(DB_NAME);
-$db->exec("INSERT INTO " . VALUES_TABLE_NAME . " (type, value, filename) VALUES (
+$s3 = new SimpleS3Client([
+    'region' => $_ENV['S3_REGION'],
+    'accessKeyId' => $_ENV['S3_ACCESS_KEY_ID'],
+    'accessKeySecret' => $_ENV['S3_KEY_SECRET']
+    ]);
+
+$date = new DateTimeImmutable();
+$upload_filename = $date->format('Y-m-d_H-i-s') . '.' . 
+    pathinfo($image_file['name'], PATHINFO_EXTENSION);
+$resource = fopen($image_file['tmp_name'], 'r');
+$s3->upload($_ENV['S3_BUCKET'], $upload_filename, $resource, ['ContentType' => 'image/jpeg']);
+$url = $s3->getUrl($_ENV['S3_BUCKET'], $upload_filename);
+
+$db = new SQLite3($_ENV['DB_FILE']);
+$db->exec("INSERT INTO " . $_ENV['DB_VALUES_TABLE_NAME'] . " (type, value, filename, fileurl) VALUES (
 	'$type',
 	$value,
-	'$upload_filename')");
+	'$upload_filename',
+    '$url')");
 $db->close();
 
 include('../store_value_success.inc.php');

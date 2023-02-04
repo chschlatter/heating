@@ -12,5 +12,5 @@
         }
 <?php endif; ?>
        </style>
-       <title><?php echo APP_NAME ?></title>
+       <title><?php echo $_ENV['APP_NAME'] ?></title>
     </head>

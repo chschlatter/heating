@@ -4,7 +4,7 @@
 
     <body>
         <main class="container">
-            <h1><?php echo APP_NAME ?></h1>
+            <h1><?php echo $_ENV['APP_NAME'] ?></h1>
             <h2>Add meter value</h2>
 
             <h4>Type: <?=$type?></h4>

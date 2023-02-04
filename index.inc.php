@@ -4,7 +4,7 @@
 
     <body>
         <main class="container">
-            <h1><?php echo APP_NAME ?></h1>
+            <h1><?php echo $_ENV['APP_NAME'] ?></h1>
 
             <article>
                 <table>
@@ -31,8 +31,8 @@
                                 <p><strong><?php echo $values['type']; ?></strong><br>
                                 Wert: <?php echo $values['value']; ?></p>    
                             
-        <?php if ($values['filename']): ?>
-                                <img src="./uploads/<?= $values['filename'] ?>" />
+        <?php if ($values['fileurl']): ?>
+                                <img src="<?= $values['fileurl'] ?>" />
         <?php endif; ?>
                             </article>
 
@@ -45,8 +45,8 @@
                                 <p><strong><?php echo $values['type']; ?></strong><br>
                                 Wert: <?php echo $values['value']; ?></p>    
                             
-        <?php if ($values['filename']): ?>
-                                <img src="./uploads/<?= $values['filename'] ?>" />
+        <?php if ($values['fileurl']): ?>
+                                <img src="<?= $values['fileurl'] ?>" />
         <?php endif; ?>
                             </article>
 

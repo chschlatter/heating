@@ -4,7 +4,7 @@
 
     <body>
         <main class="container">
-            <h1><?php echo APP_NAME ?></h1>
+            <h1><?php echo $_ENV['APP_NAME'] ?></h1>
             <h2>Error</h2>
             <p><?= $error_message ?></p>
         </main>

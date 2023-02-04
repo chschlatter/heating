@@ -1,6 +1,8 @@
 <?php
+require 'vendor/autoload.php';
 
-define('APP_NAME', 'Heating Stats');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 define('METER_TYPES', [
 	'Haus_C_Verbrauch_Heizen',
@@ -11,10 +13,6 @@ define('METER_TYPES', [
 	'Haus_D_Produktion_Holz'
 	]);
 
-define('DB_NAME', __DIR__ . '/database.db');
-define('VALUES_TABLE_NAME', 'meter_values');
-define('LOGIN_TABLE_NAME', 'logins');
-
 $small_container = false;
 
 function error($error_message) 
@@ -23,13 +21,15 @@ function error($error_message)
     exit();
 }
 
+// redirect to /login.php if no cookie for authentication available
+// hint: $no_auth is set by login.php
 if (!isset($no_auth) or $no_auth === false) {
-	if ($_COOKIE['login']) {
+	if (isset($_COOKIE['login'])) {
 		list($c_username, $c_token) = explode(',', $_COOKIE['login']);
 
-		$db = new SQLite3(DB_NAME);
+		$db = new SQLite3($_ENV['DB_FILE']);
 		$hashed_password = $db->querySingle(
-			"SELECT (password) FROM " . LOGIN_TABLE_NAME . " WHERE username = '$c_username';");
+			"SELECT (password) FROM " . $_ENV['DB_LOGINS_TABLE_NAME'] . " WHERE username = '$c_username';");
 		if ($hashed_password) {
 			if ($c_token != hash('sha256', $c_username . $hashed_password)) {
 				error('Cannot validate cookie token.');

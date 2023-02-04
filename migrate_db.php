@@ -7,14 +7,15 @@ if (isset($options['h']) or !isset($options['p'])) {
 	exit(1);
 }
 
-$db = new SQLite3('database.db');
+$db = new SQLite3('/data/database.db');
 
 $db->exec("CREATE TABLE IF NOT EXISTS meter_values(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	type TEXT NOT NULL,
 	value INTEGER NOT NULL,
-	filename TEXT DEFAULT NULL)");
+	filename TEXT DEFAULT NULL,
+	fileurl TEXT DEFAULT NULL)");
 
 $db->exec("CREATE TABLE IF NOT EXISTS logins(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
