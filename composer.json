@@ -1,0 +1,6 @@
+{
+    "require": {
+        "async-aws/simple-s3": "^1.1",
+        "vlucas/phpdotenv": "^5.5"
+    }
+}

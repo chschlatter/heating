@@ -1,1 +1,4 @@
 database.db
+composer.phar
+/vendor/
+.env
