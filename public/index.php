@@ -2,8 +2,6 @@
 
 include('../init.php');
 
-$db = new SQLite3($_ENV['DB_FILE']);
-
 $results = $db->query("SELECT * FROM " . $_ENV['DB_VALUES_TABLE_NAME'] . " ORDER BY created_at ASC;");
 $values_per_date = [];
 while ($row = $results->fetchArray()) {

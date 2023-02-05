@@ -21,26 +21,26 @@ function error($error_message)
     exit();
 }
 
-// redirect to /login.php if no cookie for authentication available
-// hint: $no_auth is set by login.php
-if (!isset($no_auth) or $no_auth === false) {
-	if (isset($_COOKIE['login'])) {
-		list($c_username, $c_token) = explode(',', $_COOKIE['login']);
-
-		$db = new SQLite3($_ENV['DB_FILE']);
-		$hashed_password = $db->querySingle(
-			"SELECT (password) FROM " . $_ENV['DB_LOGINS_TABLE_NAME'] . " WHERE username = '$c_username';");
-		if ($hashed_password) {
-			if ($c_token != hash('sha256', $c_username . $hashed_password)) {
-				error('Cannot validate cookie token.');
-			}
-		} else {
-			error('Unknown username.');
+// check cookie for authentication, otherwise redirect to login.php
+preg_match('%/([^/]+)$%', $_SERVER['SCRIPT_NAME'], $matches);
+if ($matches[1] != 'login.php') {
+	if (isset($_COOKIE['token'])) {
+		if ($_COOKIE['token'] != hash('sha256', $_ENV['APP_ADMIN_PWD'])) {
+			error('Cannot validate cookie token.');
 		}
-		$db->close();
 	} else {
 		header('Location: /login.php');
 	}
 }
+
+// initialize sqlite db, create table(s) if they don't exist
+$db = new SQLite3($_ENV['DB_FILE']);
+$db->exec("CREATE TABLE IF NOT EXISTS meter_values(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	type TEXT NOT NULL,
+	value INTEGER NOT NULL,
+	filename TEXT DEFAULT NULL,
+	fileurl TEXT DEFAULT NULL)");
 
 ?>

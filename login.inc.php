@@ -5,9 +5,8 @@
     <body>
         <main class="container">
             <form method="post" action="login.php">
-                Username: <input type="text" name="username"> <br>
-                Password: <input type="password" name="password"> <br>
-                <input type="submit" value="Log In">
+                Admin password: <input type="password" name="password"> <br>
+                <input type="submit" value="Submit">
             </form>
         </main>
     </body>

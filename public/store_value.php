@@ -55,7 +55,6 @@ $resource = fopen($image_file['tmp_name'], 'r');
 $s3->upload($_ENV['S3_BUCKET'], $upload_filename, $resource, ['ContentType' => 'image/jpeg']);
 $url = $s3->getUrl($_ENV['S3_BUCKET'], $upload_filename);
 
-$db = new SQLite3($_ENV['DB_FILE']);
 $db->exec("INSERT INTO " . $_ENV['DB_VALUES_TABLE_NAME'] . " (type, value, filename, fileurl) VALUES (
 	'$type',
 	$value,
