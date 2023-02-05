@@ -1,4 +1,5 @@
 .git
 **/.gitignore
 .dockerignore
+/vendor/
 public/uploads/*

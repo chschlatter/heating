@@ -1,0 +1,14 @@
+
+services:
+  web:
+    image: heating-app:latest
+    ports:
+       - 80:80
+    volumes:
+      - type: volume
+        source: data
+        target: /data
+    env_file: .env
+
+volumes:
+  data:
